@@ -16,7 +16,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "SumoPod AI Sample",
+        title = "Sumopod AI Sample",
     ) {
         App()
     }

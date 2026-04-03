@@ -1,49 +1,36 @@
-# CLAUDE.md — SumoPod AI SDK
+# CLAUDE.md — Sumopod AI SDK
 
 ## Project Overview
 
-Kotlin Multiplatform SDK for the SumoPod AI API (OpenAI-compatible). Provides chat completions with streaming, embeddings, and model listing across Android, iOS, and JVM.
+Kotlin Multiplatform SDK for the Sumopod AI API (OpenAI-compatible). Single entry point via `Sumopod` singleton object. Supports Android, iOS, and JVM.
 
 ## Build Commands
 
 ```bash
-# Set Java (required on macOS without JAVA_HOME)
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
-# Build library (all targets)
-./gradlew :library:build
-
-# Run JVM tests
-./gradlew :library:jvmTest
-
-# Build Android sample APK
-./gradlew :sample:assembleDebug
-
-# Run desktop sample
-./gradlew :sample:run
-
-# Compile iOS targets
-./gradlew :library:compileKotlinIosArm64
-./gradlew :library:compileKotlinIosSimulatorArm64
-
-# Full build (all platforms)
-./gradlew build
+./gradlew :library:build              # Build library (all targets)
+./gradlew :library:jvmTest            # Run JVM tests
+./gradlew :library:testAndroidHostTest # Run Android tests
+./gradlew :sample:assembleDebug       # Build Android sample APK
+./gradlew :sample:run                 # Run desktop sample
+./gradlew :library:compileKotlinIosArm64  # Compile iOS
 ```
 
 ## Architecture
 
-- **`:library`** — SDK module (commonMain + platform engines)
+- **`:library`** — SDK module (single `Sumopod` entry point)
 - **`:sample`** — Compose Multiplatform demo app (Android + iOS + Desktop)
 
 ## Key Patterns
 
+- **Entry point**: `Sumopod.init("sk-xxx")` then `Sumopod.chatCompletion(...)` etc.
 - **Package**: `com.cikup.sumopod.ai`
-- **HTTP**: Ktor 3.3.1 with platform engines (CIO/OkHttp/Darwin)
-- **Serialization**: kotlinx.serialization 1.9.0 (must stay compatible with Kotlin 2.2.20)
-- **DI**: Koin 4.0.0
-- **Database**: Room KMP 2.7.1 with `@ConstructedBy` for iOS
+- **HTTP**: Ktor 3.3.1 (CIO/OkHttp/Darwin per platform)
+- **Serialization**: kotlinx.serialization 1.9.0
 - **Streaming**: SSE parser reads `ByteReadChannel` → `Flow<ChatCompletionChunk>`
 - **Security**: API keys redacted in logs/toString, HTTPS-only, input validation
+- **Visibility**: `explicitApi()` enforced. `Sumopod` object + data models are public. All implementation is `internal`.
 
 ## Version Constraints
 
@@ -56,21 +43,19 @@ Kotlin 2.2.20 requires:
 ```
 library/src/
 ├── commonMain/kotlin/com/cikup/sumopod/ai/
-│   ├── SumoPodAI.kt          # Public interface
-│   ├── SumoPodAIClient.kt     # Implementation
-│   ├── SumoPodConfig.kt       # Config + DSL builder
+│   ├── Sumopod.kt             # Public singleton entry point
+│   ├── SumopodAI.kt           # Internal interface
+│   ├── SumopodAIClient.kt     # Internal implementation
+│   ├── SumopodConfig.kt       # Config + DSL builder
 │   ├── model/                 # Request/response data classes
-│   ├── error/                 # SumoPodException sealed hierarchy
-│   ├── cache/                 # Room database (opt-in)
-│   ├── internal/              # HttpClientFactory, SseParser, InputValidator
-│   └── di/                    # Koin module
+│   ├── error/                 # SumopodException sealed hierarchy
+│   ├── cache/                 # Room database (internal)
+│   └── internal/              # HttpClientFactory, SseParser, InputValidator
 ├── jvmMain/     → CIO engine
-├── androidMain/ → OkHttp engine + Room builder
-└── iosMain/     → Darwin engine + Room builder
+├── androidMain/ → OkHttp engine
+└── iosMain/     → Darwin engine
 ```
 
 ## Testing
 
-Tests are in `library/src/commonTest/`. Run with `./gradlew :library:jvmTest`.
-
-Test files: SerializationTest, ChatCompletionTest, StreamingTest, ErrorHandlingTest, SecurityTest, InputValidatorTest.
+Run with `./gradlew :library:jvmTest :library:testAndroidHostTest :sample:testDebugUnitTest`.

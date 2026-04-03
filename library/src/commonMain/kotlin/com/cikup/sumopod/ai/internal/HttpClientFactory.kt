@@ -1,6 +1,6 @@
 package com.cikup.sumopod.ai.internal
 
-import com.cikup.sumopod.ai.SumoPodConfig
+import com.cikup.sumopod.ai.SumopodConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.HttpTimeout
@@ -24,12 +24,12 @@ internal object HttpClientFactory {
         isLenient = true
     }
 
-    fun create(config: SumoPodConfig): HttpClient {
+    fun create(config: SumopodConfig): HttpClient {
         val engine = createPlatformEngine()
         return create(config, engine)
     }
 
-    fun create(config: SumoPodConfig, engine: HttpClientEngine): HttpClient =
+    fun create(config: SumopodConfig, engine: HttpClientEngine): HttpClient =
         HttpClient(engine) {
             install(ContentNegotiation) {
                 json(json)
@@ -44,10 +44,10 @@ internal object HttpClientFactory {
             install(Logging) {
                 logger = SanitizedLogger()
                 level = when (config.logLevel) {
-                    SumoPodConfig.LogLevel.NONE -> LogLevel.NONE
-                    SumoPodConfig.LogLevel.INFO -> LogLevel.INFO
-                    SumoPodConfig.LogLevel.HEADERS -> LogLevel.HEADERS
-                    SumoPodConfig.LogLevel.BODY -> LogLevel.BODY
+                    SumopodConfig.LogLevel.NONE -> LogLevel.NONE
+                    SumopodConfig.LogLevel.INFO -> LogLevel.INFO
+                    SumopodConfig.LogLevel.HEADERS -> LogLevel.HEADERS
+                    SumopodConfig.LogLevel.BODY -> LogLevel.BODY
                 }
                 sanitizeHeader { header ->
                     header == HttpHeaders.Authorization
@@ -58,7 +58,7 @@ internal object HttpClientFactory {
                 url(config.baseUrl.trimEnd('/') + "/")
                 contentType(ContentType.Application.Json)
                 headers.append(HttpHeaders.Authorization, "Bearer ${config.apiKey}")
-                headers.append("User-Agent", "SumoPod-AI-SDK/0.1.0 (KMP)")
+                headers.append("User-Agent", "Sumopod-AI-SDK/0.1.0 (KMP)")
             }
         }
 }

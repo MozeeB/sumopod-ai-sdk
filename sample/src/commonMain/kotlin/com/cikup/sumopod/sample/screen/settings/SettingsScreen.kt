@@ -95,9 +95,9 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "SumoPod AI SDK Sample App")
+                Text(text = "Sumopod AI SDK Sample App")
                 Text(text = "Version 0.1.0")
-                Text(text = "Powered by SumoPod AI API")
+                Text(text = "Powered by Sumopod AI API")
             }
         }
     }

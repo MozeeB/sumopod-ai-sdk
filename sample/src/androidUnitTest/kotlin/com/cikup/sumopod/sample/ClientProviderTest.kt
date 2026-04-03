@@ -1,44 +1,45 @@
 package com.cikup.sumopod.sample
 
+import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.sample.di.ClientProvider
 import com.cikup.sumopod.sample.screen.settings.SettingsViewModel
 import kotlin.test.Test
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class ClientProviderTest {
 
     @Test
-    fun returnsNullWhenApiKeyEmpty() {
+    fun returnsFalseWhenApiKeyEmpty() {
         val settings = SettingsViewModel()
         val provider = ClientProvider(settings)
-        assertNull(provider.getClient())
+        assertFalse(provider.ensureInitialized())
     }
 
     @Test
-    fun returnsNullWhenApiKeyTooShort() {
+    fun returnsFalseWhenApiKeyTooShort() {
         val settings = SettingsViewModel()
         settings.updateApiKey("sk-short")
         val provider = ClientProvider(settings)
-        assertNull(provider.getClient())
+        assertFalse(provider.ensureInitialized())
     }
 
     @Test
-    fun returnsNullWhenApiKeyWrongPrefix() {
+    fun returnsFalseWhenApiKeyWrongPrefix() {
         val settings = SettingsViewModel()
         settings.updateApiKey("invalid-prefix-long-enough")
         val provider = ClientProvider(settings)
-        assertNull(provider.getClient())
+        assertFalse(provider.ensureInitialized())
     }
 
     @Test
-    fun returnsClientWhenApiKeyValid() {
+    fun returnsTrueWhenApiKeyValid() {
         val settings = SettingsViewModel()
         settings.updateApiKey("sk-validKeyLongEnough12345")
         val provider = ClientProvider(settings)
-        val client = provider.getClient()
-        assertNotNull(client)
-        client.close()
+        assertTrue(provider.ensureInitialized())
+        assertTrue(Sumopod.isInitialized)
+        Sumopod.close()
     }
 
     @Test
@@ -46,28 +47,13 @@ class ClientProviderTest {
         val settings = SettingsViewModel()
         val provider = ClientProvider(settings)
 
-        // Initially null
-        assertNull(provider.getClient())
+        assertFalse(provider.ensureInitialized())
 
-        // After setting valid key
         settings.updateApiKey("sk-validKeyLongEnough12345")
-        val client = provider.getClient()
-        assertNotNull(client)
-        client.close()
+        assertTrue(provider.ensureInitialized())
+        Sumopod.close()
 
-        // After clearing key
         settings.updateApiKey("")
-        assertNull(provider.getClient())
-    }
-
-    @Test
-    fun reflectsBaseUrlChanges() {
-        val settings = SettingsViewModel()
-        settings.updateApiKey("sk-validKeyLongEnough12345")
-        settings.updateBaseUrl("https://custom.api.com/v1")
-        val provider = ClientProvider(settings)
-        val client = provider.getClient()
-        assertNotNull(client)
-        client.close()
+        assertFalse(provider.ensureInitialized())
     }
 }

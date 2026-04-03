@@ -56,7 +56,7 @@ class AndroidSerializationTest {
             "model": "gpt-4o-mini",
             "choices": [{
                 "index": 0,
-                "message": {"role": "assistant", "content": "Hello from SumoPod!"},
+                "message": {"role": "assistant", "content": "Hello from Sumopod!"},
                 "finish_reason": "stop"
             }],
             "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}

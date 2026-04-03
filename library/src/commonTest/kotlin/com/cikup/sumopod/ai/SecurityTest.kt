@@ -10,7 +10,7 @@ class SecurityTest {
 
     @Test
     fun configToStringRedactsApiKey() {
-        val config = SumoPodConfig(apiKey = "sk-realKeyThatShouldBeHidden12345")
+        val config = SumopodConfig(apiKey = "sk-realKeyThatShouldBeHidden12345")
         val str = config.toString()
         assertContains(str, "sk-***")
         assertFalse(str.contains("realKeyThatShouldBeHidden12345"))
@@ -28,7 +28,7 @@ class SecurityTest {
     @Test
     fun httpBaseUrlMustBeHttps() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("sk-validKeyForTestingPurpose123") {
+            Sumopod.init("sk-validKeyForTestingPurpose123") {
                 baseUrl = "http://insecure.example.com/v1"
             }
         }
@@ -37,21 +37,21 @@ class SecurityTest {
     @Test
     fun apiKeyMustStartWithSk() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("invalid-key-format-no-sk-prefix")
+            Sumopod.init("invalid-key-format-no-sk-prefix")
         }
     }
 
     @Test
     fun apiKeyMustNotBeBlank() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("")
+            Sumopod.init("")
         }
     }
 
     @Test
     fun apiKeyMustBeLongEnough() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("sk-short")
+            Sumopod.init("sk-short")
         }
     }
 }

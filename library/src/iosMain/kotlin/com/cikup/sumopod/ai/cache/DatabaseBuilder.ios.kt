@@ -4,11 +4,11 @@ import androidx.room.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import platform.Foundation.NSHomeDirectory
 
-public fun createSumoPodDatabase(): SumoPodDatabase {
+internal fun createSumopodDatabase(): SumopodDatabase {
     val dbPath = NSHomeDirectory() + "/sumopod_ai.db"
-    return Room.databaseBuilder<SumoPodDatabase>(
+    return Room.databaseBuilder<SumopodDatabase>(
         name = dbPath,
-        factory = SumoPodDatabaseConstructor::initialize,
+        factory = SumopodDatabaseConstructor::initialize,
     )
         .setDriver(BundledSQLiteDriver())
         .build()

@@ -1,6 +1,6 @@
 package com.cikup.sumopod.sample.di
 
-import com.cikup.sumopod.ai.SumoPodAI
+import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.sample.screen.chat.ChatViewModel
 import com.cikup.sumopod.sample.screen.models.ModelsViewModel
 import com.cikup.sumopod.sample.screen.settings.SettingsViewModel
@@ -16,12 +16,13 @@ val sampleModule = module {
 
 class ClientProvider(private val settingsViewModel: SettingsViewModel) {
 
-    fun getClient(): SumoPodAI? {
+    fun ensureInitialized(): Boolean {
         val apiKey = settingsViewModel.apiKey.value
         val baseUrl = settingsViewModel.baseUrl.value
         if (apiKey.isBlank() || !apiKey.startsWith("sk-") || apiKey.length < 20) {
-            return null
+            return false
         }
-        return SumoPodAI(apiKey) { this.baseUrl = baseUrl }
+        Sumopod.init(apiKey) { this.baseUrl = baseUrl }
+        return true
     }
 }

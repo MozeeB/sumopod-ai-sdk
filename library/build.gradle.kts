@@ -101,8 +101,8 @@ mavenPublishing {
     coordinates(group.toString(), "sumopod-ai-sdk", version.toString())
 
     pom {
-        name = "SumoPod AI SDK"
-        description = "Kotlin Multiplatform SDK for the SumoPod AI API. OpenAI-compatible with 40+ models."
+        name = "Sumopod AI SDK"
+        description = "Kotlin Multiplatform SDK for the Sumopod AI API. OpenAI-compatible with 40+ models."
         inceptionYear = "2026"
         url = "https://github.com/MozeeB/sumopod-ai-sdk"
         licenses {

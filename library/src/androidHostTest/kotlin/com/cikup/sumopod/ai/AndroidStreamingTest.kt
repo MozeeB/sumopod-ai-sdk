@@ -16,9 +16,9 @@ import kotlin.test.assertEquals
 
 class AndroidStreamingTest {
 
-    private val testConfig = SumoPodConfig(
+    private val testConfig = SumopodConfig(
         apiKey = "sk-testKeyForAndroidStreaming1",
-        logLevel = SumoPodConfig.LogLevel.NONE,
+        logLevel = SumopodConfig.LogLevel.NONE,
     )
 
     private val ssePayload = buildString {
@@ -44,7 +44,7 @@ class AndroidStreamingTest {
             )
         }
         val httpClient = HttpClientFactory.create(testConfig, engine)
-        val client = SumoPodAIClient(testConfig, httpClient)
+        val client = SumopodAIClient(testConfig, httpClient)
         val request = ChatCompletionRequest(
             model = "gpt-4o-mini",
             messages = listOf(ChatMessage(ChatRole.User, "Hi")),
@@ -63,7 +63,7 @@ class AndroidStreamingTest {
             )
         }
         val httpClient = HttpClientFactory.create(testConfig, engine)
-        val client = SumoPodAIClient(testConfig, httpClient)
+        val client = SumopodAIClient(testConfig, httpClient)
         val request = ChatCompletionRequest(
             model = "gpt-4o-mini",
             messages = listOf(ChatMessage(ChatRole.User, "Hi")),
@@ -84,7 +84,7 @@ class AndroidStreamingTest {
             )
         }
         val httpClient = HttpClientFactory.create(testConfig, engine)
-        val client = SumoPodAIClient(testConfig, httpClient)
+        val client = SumopodAIClient(testConfig, httpClient)
         val request = ChatCompletionRequest(
             model = "gpt-4o-mini",
             messages = listOf(ChatMessage(ChatRole.User, "Hi")),

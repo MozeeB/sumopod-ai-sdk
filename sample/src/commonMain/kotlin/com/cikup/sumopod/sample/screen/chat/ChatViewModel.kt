@@ -2,6 +2,7 @@ package com.cikup.sumopod.sample.screen.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.ai.model.ChatCompletionRequest
 import com.cikup.sumopod.ai.model.ChatMessage
 import com.cikup.sumopod.ai.model.ChatRole
@@ -38,7 +39,7 @@ class ChatViewModel(
 
     fun sendMessage(content: String) {
         if (content.isBlank()) return
-        val client = clientProvider.getClient() ?: run {
+        if (!clientProvider.ensureInitialized()) {
             _uiState.update { it.copy(error = "Please configure your API key in Settings") }
             return
         }
@@ -73,7 +74,7 @@ class ChatViewModel(
                 }
 
                 var fullContent = ""
-                client.chatCompletionStream(request).collect { chunk ->
+                Sumopod.chatCompletionStream(request).collect { chunk ->
                     val delta = chunk.choices.firstOrNull()?.delta?.content.orEmpty()
                     fullContent += delta
                     _uiState.update { state ->

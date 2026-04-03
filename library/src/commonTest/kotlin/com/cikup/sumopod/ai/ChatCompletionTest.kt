@@ -1,6 +1,6 @@
 package com.cikup.sumopod.ai
 
-import com.cikup.sumopod.ai.error.SumoPodException
+import com.cikup.sumopod.ai.error.SumopodException
 import com.cikup.sumopod.ai.internal.HttpClientFactory
 import com.cikup.sumopod.ai.model.ChatCompletionRequest
 import com.cikup.sumopod.ai.model.ChatMessage
@@ -18,9 +18,9 @@ import kotlin.test.assertTrue
 
 class ChatCompletionTest {
 
-    private val testConfig = SumoPodConfig(
+    private val testConfig = SumopodConfig(
         apiKey = "sk-testKeyForUnitTesting12345",
-        logLevel = SumoPodConfig.LogLevel.NONE,
+        logLevel = SumopodConfig.LogLevel.NONE,
     )
 
     private val successResponse = """
@@ -31,16 +31,16 @@ class ChatCompletionTest {
         "model": "gpt-4o-mini",
         "choices": [{
             "index": 0,
-            "message": {"role": "assistant", "content": "Hello from SumoPod!"},
+            "message": {"role": "assistant", "content": "Hello from Sumopod!"},
             "finish_reason": "stop"
         }],
         "usage": {"prompt_tokens": 10, "completion_tokens": 5, "total_tokens": 15}
     }
     """.trimIndent()
 
-    private fun createClient(engine: MockEngine): SumoPodAIClient {
+    private fun createClient(engine: MockEngine): SumopodAIClient {
         val httpClient = HttpClientFactory.create(testConfig, engine)
-        return SumoPodAIClient(testConfig, httpClient)
+        return SumopodAIClient(testConfig, httpClient)
     }
 
     @Test
@@ -58,7 +58,7 @@ class ChatCompletionTest {
             messages = listOf(ChatMessage(ChatRole.User, "Hi")),
         )
         val response = client.chatCompletion(request)
-        assertEquals("Hello from SumoPod!", response.choices.first().message.content)
+        assertEquals("Hello from Sumopod!", response.choices.first().message.content)
         assertEquals(15, response.usage?.totalTokens)
     }
 
@@ -93,7 +93,7 @@ class ChatCompletionTest {
             )
         }
         val client = createClient(engine)
-        assertFailsWith<SumoPodException.AuthenticationException> {
+        assertFailsWith<SumopodException.AuthenticationException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",
@@ -116,7 +116,7 @@ class ChatCompletionTest {
             )
         }
         val client = createClient(engine)
-        val exception = assertFailsWith<SumoPodException.RateLimitException> {
+        val exception = assertFailsWith<SumopodException.RateLimitException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",
@@ -137,7 +137,7 @@ class ChatCompletionTest {
             )
         }
         val client = createClient(engine)
-        val exception = assertFailsWith<SumoPodException.ApiException> {
+        val exception = assertFailsWith<SumopodException.ApiException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",

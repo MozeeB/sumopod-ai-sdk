@@ -12,10 +12,10 @@ import com.cikup.sumopod.ai.cache.entity.CachedModel
     version = 1,
     exportSchema = true,
 )
-@ConstructedBy(SumoPodDatabaseConstructor::class)
-public abstract class SumoPodDatabase : RoomDatabase() {
-    public abstract fun modelCacheDao(): ModelCacheDao
+@ConstructedBy(SumopodDatabaseConstructor::class)
+internal abstract class SumopodDatabase : RoomDatabase() {
+    internal abstract fun modelCacheDao(): ModelCacheDao
 }
 
 @Suppress("NO_ACTUAL_FOR_EXPECT")
-public expect object SumoPodDatabaseConstructor : RoomDatabaseConstructor<SumoPodDatabase>
+internal expect object SumopodDatabaseConstructor : RoomDatabaseConstructor<SumopodDatabase>

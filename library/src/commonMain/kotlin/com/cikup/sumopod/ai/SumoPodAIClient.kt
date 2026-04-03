@@ -1,7 +1,7 @@
 package com.cikup.sumopod.ai
 
 import com.cikup.sumopod.ai.error.ErrorResponse
-import com.cikup.sumopod.ai.error.SumoPodException
+import com.cikup.sumopod.ai.error.SumopodException
 import com.cikup.sumopod.ai.internal.ApiRoutes
 import com.cikup.sumopod.ai.internal.InputValidator
 import com.cikup.sumopod.ai.internal.SseParser
@@ -26,10 +26,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.serialization.json.Json
 
-internal class SumoPodAIClient(
-    private val config: SumoPodConfig,
+internal class SumopodAIClient(
+    private val config: SumopodConfig,
     private val httpClient: HttpClient,
-) : SumoPodAI {
+) : SumopodAI {
 
     private val json = Json {
         ignoreUnknownKeys = true
@@ -98,15 +98,15 @@ internal class SumoPodAIClient(
         }
 
         throw when (response.status) {
-            HttpStatusCode.Unauthorized -> SumoPodException.AuthenticationException()
+            HttpStatusCode.Unauthorized -> SumopodException.AuthenticationException()
             HttpStatusCode.TooManyRequests -> {
                 val retryAfter = response.headers["Retry-After"]?.toLongOrNull()?.let { it * 1000 }
-                SumoPodException.RateLimitException(retryAfter)
+                SumopodException.RateLimitException(retryAfter)
             }
             HttpStatusCode.BadRequest,
             HttpStatusCode(422, "Unprocessable Entity") ->
-                SumoPodException.InvalidRequestException(errorParam)
-            else -> SumoPodException.ApiException(response.status.value)
+                SumopodException.InvalidRequestException(errorParam)
+            else -> SumopodException.ApiException(response.status.value)
         }
     }
 }

@@ -9,12 +9,13 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class AndroidSecurityTest {
 
     @Test
     fun configToStringRedactsApiKeyOnAndroid() {
-        val config = SumoPodConfig(apiKey = "sk-androidSecretKey1234567890")
+        val config = SumopodConfig(apiKey = "sk-androidSecretKey1234567890")
         val str = config.toString()
         assertContains(str, "sk-***")
         assertFalse(str.contains("androidSecretKey1234567890"))
@@ -31,7 +32,7 @@ class AndroidSecurityTest {
     @Test
     fun httpUrlRejectedOnAndroid() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("sk-validKeyForAndroidTest12345") {
+            Sumopod.init("sk-validKeyForAndroidTest12345") {
                 baseUrl = "http://insecure.example.com/v1"
             }
         }
@@ -40,21 +41,21 @@ class AndroidSecurityTest {
     @Test
     fun blankApiKeyRejectedOnAndroid() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("")
+            Sumopod.init("")
         }
     }
 
     @Test
     fun shortApiKeyRejectedOnAndroid() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("sk-short")
+            Sumopod.init("sk-short")
         }
     }
 
     @Test
     fun invalidApiKeyPrefixRejectedOnAndroid() {
         assertFailsWith<IllegalArgumentException> {
-            SumoPodAI("invalid-no-sk-prefix-here-long")
+            Sumopod.init("invalid-no-sk-prefix-here-long")
         }
     }
 
@@ -89,9 +90,9 @@ class AndroidSecurityTest {
     }
 
     @Test
-    fun validConfigCreatesClientOnAndroid() {
-        val client = SumoPodAI("sk-validKeyForAndroidTest12345")
-        // should not throw
-        client.close()
+    fun validConfigInitializesOnAndroid() {
+        Sumopod.init("sk-validKeyForAndroidTest12345")
+        assertTrue(Sumopod.isInitialized)
+        Sumopod.close()
     }
 }

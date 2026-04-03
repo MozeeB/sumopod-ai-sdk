@@ -1,6 +1,6 @@
 package com.cikup.sumopod.sample
 
-import com.cikup.sumopod.ai.SumoPodConfig
+import com.cikup.sumopod.ai.SumopodConfig
 import com.cikup.sumopod.sample.screen.settings.SettingsViewModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -18,7 +18,7 @@ class SettingsViewModelTest {
     @Test
     fun initialBaseUrlIsDefault() {
         val vm = SettingsViewModel()
-        assertEquals(SumoPodConfig.DEFAULT_BASE_URL, vm.baseUrl.value)
+        assertEquals(SumopodConfig.DEFAULT_BASE_URL, vm.baseUrl.value)
     }
 
     @Test

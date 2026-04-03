@@ -1,6 +1,6 @@
 package com.cikup.sumopod.ai
 
-public data class SumoPodConfig(
+public data class SumopodConfig(
     val apiKey: String,
     val baseUrl: String = DEFAULT_BASE_URL,
     val connectTimeoutMs: Long = 10_000L,
@@ -13,19 +13,19 @@ public data class SumoPodConfig(
     public enum class LogLevel { NONE, INFO, HEADERS, BODY }
 
     override fun toString(): String =
-        "SumoPodConfig(apiKey=sk-***, baseUrl=$baseUrl, logLevel=$logLevel, enableCache=$enableCache)"
+        "SumopodConfig(apiKey=sk-***, baseUrl=$baseUrl, logLevel=$logLevel, enableCache=$enableCache)"
 
     public companion object {
         public const val DEFAULT_BASE_URL: String = "https://ai.sumopod.com/v1"
     }
 }
 
-public class SumoPodConfigBuilder(private val apiKey: String) {
-    public var baseUrl: String = SumoPodConfig.DEFAULT_BASE_URL
+public class SumopodConfigBuilder(private val apiKey: String) {
+    public var baseUrl: String = SumopodConfig.DEFAULT_BASE_URL
     public var connectTimeoutMs: Long = 10_000L
     public var requestTimeoutMs: Long = 60_000L
     public var socketTimeoutMs: Long = 30_000L
-    public var logLevel: SumoPodConfig.LogLevel = SumoPodConfig.LogLevel.INFO
+    public var logLevel: SumopodConfig.LogLevel = SumopodConfig.LogLevel.INFO
     public var enableCache: Boolean = false
     public var certificatePins: List<String> = emptyList()
 
@@ -36,7 +36,7 @@ public class SumoPodConfigBuilder(private val apiKey: String) {
         socketTimeoutMs = builder.socket
     }
 
-    public fun build(): SumoPodConfig = SumoPodConfig(
+    public fun build(): SumopodConfig = SumopodConfig(
         apiKey = apiKey,
         baseUrl = baseUrl,
         connectTimeoutMs = connectTimeoutMs,

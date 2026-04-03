@@ -2,6 +2,7 @@ package com.cikup.sumopod.sample.screen.models
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.ai.model.ModelInfo
 import com.cikup.sumopod.sample.di.ClientProvider
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +25,7 @@ class ModelsViewModel(
     val uiState: StateFlow<ModelsUiState> = _uiState.asStateFlow()
 
     fun loadModels() {
-        val client = clientProvider.getClient() ?: run {
+        if (!clientProvider.ensureInitialized()) {
             _uiState.update { it.copy(error = "Please configure your API key in Settings") }
             return
         }
@@ -33,7 +34,7 @@ class ModelsViewModel(
 
         viewModelScope.launch {
             try {
-                val modelList = client.models()
+                val modelList = Sumopod.models()
                 _uiState.update {
                     it.copy(
                         models = modelList.data.sortedBy { model -> model.id },

@@ -1,4 +1,4 @@
-# SumoPod AI SDK - Consumer ProGuard Rules
+# Sumopod AI SDK - Consumer ProGuard Rules
 # These rules are automatically applied to consumers of this library.
 
 # Keep all public API classes

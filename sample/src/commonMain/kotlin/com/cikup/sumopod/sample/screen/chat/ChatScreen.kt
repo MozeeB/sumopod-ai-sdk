@@ -100,7 +100,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
-                            text = "SumoPod AI",
+                            text = "Sumopod AI",
                             style = MaterialTheme.typography.headlineLarge,
                             color = MaterialTheme.colorScheme.primary,
                         )

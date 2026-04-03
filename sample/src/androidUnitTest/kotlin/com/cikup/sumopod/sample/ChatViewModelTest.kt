@@ -64,11 +64,11 @@ class ChatViewModelTest {
         val provider = ClientProvider(settings)
         val vm = ChatViewModel(provider)
         vm.selectModel("gpt-4o")
-        vm.sendMessage("test") // will add error since no API key
+        vm.sendMessage("test")
         vm.clearMessages()
         assertTrue(vm.uiState.value.messages.isEmpty())
         assertNull(vm.uiState.value.error)
-        assertEquals("gpt-4o", vm.uiState.value.selectedModel) // model preserved
+        assertEquals("gpt-4o", vm.uiState.value.selectedModel)
     }
 
     @Test
@@ -76,7 +76,7 @@ class ChatViewModelTest {
         val settings = SettingsViewModel()
         val provider = ClientProvider(settings)
         val vm = ChatViewModel(provider)
-        vm.sendMessage("Hello") // triggers error
+        vm.sendMessage("Hello")
         assertEquals("Please configure your API key in Settings", vm.uiState.value.error)
         vm.dismissError()
         assertNull(vm.uiState.value.error)

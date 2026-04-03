@@ -1,6 +1,6 @@
 package com.cikup.sumopod.ai
 
-import com.cikup.sumopod.ai.error.SumoPodException
+import com.cikup.sumopod.ai.error.SumopodException
 import com.cikup.sumopod.ai.internal.HttpClientFactory
 import com.cikup.sumopod.ai.model.ChatCompletionRequest
 import com.cikup.sumopod.ai.model.ChatMessage
@@ -18,9 +18,9 @@ import kotlin.test.assertTrue
 
 class AndroidClientTest {
 
-    private val testConfig = SumoPodConfig(
+    private val testConfig = SumopodConfig(
         apiKey = "sk-testKeyForAndroidTesting123",
-        logLevel = SumoPodConfig.LogLevel.NONE,
+        logLevel = SumopodConfig.LogLevel.NONE,
     )
 
     private val chatSuccessResponse = """
@@ -38,9 +38,9 @@ class AndroidClientTest {
     }
     """.trimIndent()
 
-    private fun createClient(engine: MockEngine): SumoPodAIClient {
+    private fun createClient(engine: MockEngine): SumopodAIClient {
         val httpClient = HttpClientFactory.create(testConfig, engine)
-        return SumoPodAIClient(testConfig, httpClient)
+        return SumopodAIClient(testConfig, httpClient)
     }
 
     @Test
@@ -102,7 +102,7 @@ class AndroidClientTest {
                 messages = listOf(ChatMessage(ChatRole.User, "Hi")),
             )
         )
-        assertEquals("SumoPod-AI-SDK/0.1.0 (KMP)", capturedUserAgent)
+        assertEquals("Sumopod-AI-SDK/0.1.0 (KMP)", capturedUserAgent)
     }
 
     @Test
@@ -115,7 +115,7 @@ class AndroidClientTest {
             )
         }
         val client = createClient(engine)
-        assertFailsWith<SumoPodException.AuthenticationException> {
+        assertFailsWith<SumopodException.AuthenticationException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",
@@ -138,7 +138,7 @@ class AndroidClientTest {
             )
         }
         val client = createClient(engine)
-        val exception = assertFailsWith<SumoPodException.RateLimitException> {
+        val exception = assertFailsWith<SumopodException.RateLimitException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",
@@ -159,7 +159,7 @@ class AndroidClientTest {
             )
         }
         val client = createClient(engine)
-        val exception = assertFailsWith<SumoPodException.InvalidRequestException> {
+        val exception = assertFailsWith<SumopodException.InvalidRequestException> {
             client.chatCompletion(
                 ChatCompletionRequest(
                     model = "gpt-4o-mini",
