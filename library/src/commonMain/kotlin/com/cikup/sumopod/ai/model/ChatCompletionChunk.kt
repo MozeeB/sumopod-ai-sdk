@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatCompletionChunk(
+public data class ChatCompletionChunk(
     val id: String,
     @SerialName("object") val objectType: String,
     val created: Long,
@@ -12,14 +12,14 @@ data class ChatCompletionChunk(
     val choices: List<ChunkChoice>,
 ) {
     @Serializable
-    data class ChunkChoice(
+    public data class ChunkChoice(
         val index: Int,
         val delta: ChatDelta,
         @SerialName("finish_reason") val finishReason: String? = null,
     )
 
     @Serializable
-    data class ChatDelta(
+    public data class ChatDelta(
         val role: ChatRole? = null,
         val content: String? = null,
     )

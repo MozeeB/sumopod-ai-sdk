@@ -29,8 +29,5 @@ local.properties
 *.jks
 *.env
 
-# Room schemas (generated)
-library/schemas/
-
 # OS
 Thumbs.db

@@ -8,7 +8,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-val sumoPodModule = module {
+public val sumoPodModule: org.koin.core.module.Module = module {
     single {
         SumoPodConfig(apiKey = get(named("sumopod_api_key")))
     }

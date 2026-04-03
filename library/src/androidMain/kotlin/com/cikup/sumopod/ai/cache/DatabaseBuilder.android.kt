@@ -3,7 +3,7 @@ package com.cikup.sumopod.ai.cache
 import android.content.Context
 import androidx.room.Room
 
-fun createSumoPodDatabase(context: Context): SumoPodDatabase =
+public fun createSumoPodDatabase(context: Context): SumoPodDatabase =
     Room.databaseBuilder(
         context = context,
         klass = SumoPodDatabase::class.java,

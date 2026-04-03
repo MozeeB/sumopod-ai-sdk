@@ -11,22 +11,22 @@ import com.cikup.sumopod.ai.model.ModelInfo
 import com.cikup.sumopod.ai.model.ModelList
 import kotlinx.coroutines.flow.Flow
 
-interface SumoPodAI {
+public interface SumoPodAI {
 
-    suspend fun chatCompletion(request: ChatCompletionRequest): ChatCompletionResponse
+    public suspend fun chatCompletion(request: ChatCompletionRequest): ChatCompletionResponse
 
-    fun chatCompletionStream(request: ChatCompletionRequest): Flow<ChatCompletionChunk>
+    public fun chatCompletionStream(request: ChatCompletionRequest): Flow<ChatCompletionChunk>
 
-    suspend fun embeddings(request: EmbeddingRequest): EmbeddingResponse
+    public suspend fun embeddings(request: EmbeddingRequest): EmbeddingResponse
 
-    suspend fun models(): ModelList
+    public suspend fun models(): ModelList
 
-    suspend fun model(id: String): ModelInfo
+    public suspend fun model(id: String): ModelInfo
 
-    fun close()
+    public fun close()
 
-    companion object {
-        operator fun invoke(
+    public companion object {
+        public operator fun invoke(
             apiKey: String,
             block: SumoPodConfigBuilder.() -> Unit = {},
         ): SumoPodAI {

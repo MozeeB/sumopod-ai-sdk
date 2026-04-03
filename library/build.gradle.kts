@@ -14,6 +14,7 @@ group = "com.cikup.sumopod.ai"
 version = "0.1.0"
 
 kotlin {
+    explicitApi()
     jvm()
     androidLibrary {
         namespace = "com.cikup.sumopod.ai"
@@ -103,7 +104,7 @@ mavenPublishing {
         name = "SumoPod AI SDK"
         description = "Kotlin Multiplatform SDK for the SumoPod AI API. OpenAI-compatible with 40+ models."
         inceptionYear = "2026"
-        url = "https://github.com/cikup/sumopod-ai-sdk"
+        url = "https://github.com/MozeeB/sumopod-ai-sdk"
         licenses {
             license {
                 name = "Apache License, Version 2.0"
@@ -119,9 +120,9 @@ mavenPublishing {
             }
         }
         scm {
-            url = "https://github.com/cikup/sumopod-ai-sdk"
-            connection = "scm:git:git://github.com/cikup/sumopod-ai-sdk.git"
-            developerConnection = "scm:git:ssh://git@github.com/cikup/sumopod-ai-sdk.git"
+            url = "https://github.com/MozeeB/sumopod-ai-sdk"
+            connection = "scm:git:git://github.com/MozeeB/sumopod-ai-sdk.git"
+            developerConnection = "scm:git:ssh://git@github.com/MozeeB/sumopod-ai-sdk.git"
         }
     }
 }

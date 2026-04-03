@@ -8,12 +8,12 @@ import com.cikup.sumopod.ai.model.ChatRole
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.fold
 
-suspend fun Flow<ChatCompletionChunk>.collectContent(): String =
+public suspend fun Flow<ChatCompletionChunk>.collectContent(): String =
     fold("") { acc, chunk ->
         acc + (chunk.choices.firstOrNull()?.delta?.content.orEmpty())
     }
 
-suspend fun SumoPodAI.chat(
+public suspend fun SumoPodAI.chat(
     model: String,
     vararg messages: Pair<ChatRole, String>,
     maxTokens: Int? = null,

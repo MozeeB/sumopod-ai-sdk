@@ -1,6 +1,6 @@
 package com.cikup.sumopod.ai
 
-data class SumoPodConfig(
+public data class SumoPodConfig(
     val apiKey: String,
     val baseUrl: String = DEFAULT_BASE_URL,
     val connectTimeoutMs: Long = 10_000L,
@@ -10,33 +10,33 @@ data class SumoPodConfig(
     val enableCache: Boolean = false,
     val certificatePins: List<String> = emptyList(),
 ) {
-    enum class LogLevel { NONE, INFO, HEADERS, BODY }
+    public enum class LogLevel { NONE, INFO, HEADERS, BODY }
 
     override fun toString(): String =
         "SumoPodConfig(apiKey=sk-***, baseUrl=$baseUrl, logLevel=$logLevel, enableCache=$enableCache)"
 
-    companion object {
-        const val DEFAULT_BASE_URL = "https://ai.sumopod.com/v1"
+    public companion object {
+        public const val DEFAULT_BASE_URL: String = "https://ai.sumopod.com/v1"
     }
 }
 
-class SumoPodConfigBuilder(private val apiKey: String) {
-    var baseUrl: String = SumoPodConfig.DEFAULT_BASE_URL
-    var connectTimeoutMs: Long = 10_000L
-    var requestTimeoutMs: Long = 60_000L
-    var socketTimeoutMs: Long = 30_000L
-    var logLevel: SumoPodConfig.LogLevel = SumoPodConfig.LogLevel.INFO
-    var enableCache: Boolean = false
-    var certificatePins: List<String> = emptyList()
+public class SumoPodConfigBuilder(private val apiKey: String) {
+    public var baseUrl: String = SumoPodConfig.DEFAULT_BASE_URL
+    public var connectTimeoutMs: Long = 10_000L
+    public var requestTimeoutMs: Long = 60_000L
+    public var socketTimeoutMs: Long = 30_000L
+    public var logLevel: SumoPodConfig.LogLevel = SumoPodConfig.LogLevel.INFO
+    public var enableCache: Boolean = false
+    public var certificatePins: List<String> = emptyList()
 
-    fun timeout(block: TimeoutBuilder.() -> Unit) {
+    public fun timeout(block: TimeoutBuilder.() -> Unit) {
         val builder = TimeoutBuilder().apply(block)
         connectTimeoutMs = builder.connect
         requestTimeoutMs = builder.request
         socketTimeoutMs = builder.socket
     }
 
-    fun build(): SumoPodConfig = SumoPodConfig(
+    public fun build(): SumoPodConfig = SumoPodConfig(
         apiKey = apiKey,
         baseUrl = baseUrl,
         connectTimeoutMs = connectTimeoutMs,
@@ -48,8 +48,8 @@ class SumoPodConfigBuilder(private val apiKey: String) {
     )
 }
 
-class TimeoutBuilder {
-    var connect: Long = 10_000L
-    var request: Long = 60_000L
-    var socket: Long = 30_000L
+public class TimeoutBuilder {
+    public var connect: Long = 10_000L
+    public var request: Long = 60_000L
+    public var socket: Long = 30_000L
 }
