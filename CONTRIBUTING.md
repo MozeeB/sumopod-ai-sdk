@@ -48,6 +48,30 @@ When updating dependencies, ensure ABI compatibility with Kotlin 2.2.20:
    ```
 5. Submit a pull request
 
+## Release Process
+
+Releases are fully automated via GitHub Actions:
+
+1. Go to **Actions** > **Release** > **Run workflow**
+2. Select version bump type: `patch`, `minor`, or `major`
+3. The workflow will:
+   - Calculate the next version from `library/build.gradle.kts`
+   - Update version in `library/build.gradle.kts` and `sample/build.gradle.kts`
+   - Generate a CHANGELOG entry from git commits since the last tag
+   - Commit, tag (`vX.Y.Z`), and push to `main`
+   - Trigger the **Publish to Maven Central** workflow automatically
+4. The publish workflow uploads GPG keys to keyservers, publishes to Maven Central, and creates a GitHub Release
+
+### Required GitHub Secrets
+
+| Secret | Description |
+|---|---|
+| `MAVEN_CENTRAL_USERNAME` | Maven Central (Sonatype) username |
+| `MAVEN_CENTRAL_PASSWORD` | Maven Central (Sonatype) password |
+| `SIGNING_KEY` | GPG private key (ASCII-armored) |
+| `SIGNING_KEY_ID` | GPG key ID (short format) |
+| `SIGNING_PASSWORD` | GPG key passphrase |
+
 ## License
 
 By contributing, you agree that your contributions will be licensed under the Apache License 2.0.

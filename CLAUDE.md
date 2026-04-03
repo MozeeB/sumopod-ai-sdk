@@ -20,6 +20,15 @@ export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 ./gradlew :library:compileKotlinIosArm64  # Compile iOS
 ```
 
+## Release
+
+Fully automated via GitHub Actions. Go to **Actions > Release > Run workflow** and select patch/minor/major. This bumps version, updates CHANGELOG, tags, pushes, and publishes to Maven Central automatically.
+
+Manual publish command (CI only):
+```bash
+./gradlew publishAndReleaseToMavenCentral  # Publish + auto-release
+```
+
 ## Architecture
 
 - **`:library`** — SDK module (single `Sumopod` entry point)
@@ -52,7 +61,6 @@ library/src/
 │   ├── SumopodConfig.kt       # Config + DSL builder
 │   ├── model/                 # Request/response data classes
 │   ├── error/                 # SumopodException sealed hierarchy
-│   ├── cache/                 # Room database (internal)
 │   └── internal/              # HttpClientFactory, SseParser, InputValidator
 ├── jvmMain/     → CIO engine
 ├── androidMain/ → OkHttp engine

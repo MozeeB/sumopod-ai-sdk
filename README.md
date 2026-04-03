@@ -2,6 +2,32 @@
 
 Kotlin Multiplatform SDK for the [Sumopod AI API](https://sumopod.com/dashboard/ai/quickstart). OpenAI-compatible with 40+ models across multiple providers.
 
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+dependencies {
+    implementation("com.cikup.sumopod.ai:sumopod-ai-sdk:0.1.1")
+}
+```
+
+### Gradle (Groovy)
+
+```groovy
+dependencies {
+    implementation 'com.cikup.sumopod.ai:sumopod-ai-sdk:0.1.1'
+}
+```
+
+### Kotlin Multiplatform
+
+```kotlin
+commonMain.dependencies {
+    implementation("com.cikup.sumopod.ai:sumopod-ai-sdk:0.1.1")
+}
+```
+
 ## Features
 
 - Chat completions (streaming and non-streaming)
@@ -10,7 +36,6 @@ Kotlin Multiplatform SDK for the [Sumopod AI API](https://sumopod.com/dashboard/
 - Kotlin Multiplatform: Android, iOS, JVM
 - SSE streaming via Kotlin Flow
 - Thread-safe `Sumopod` singleton entry point
-- Room KMP caching (opt-in, internal)
 - Security: API key redaction, HTTPS-only, input validation
 - 173 automated tests across all platforms
 

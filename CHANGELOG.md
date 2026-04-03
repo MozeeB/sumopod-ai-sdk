@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2026-04-03
+
+### Fixed
+- Upload GPG public key to keyservers (ubuntu, openpgp, mit) before Maven Central publish
+- Strip `v` prefix from tag in GitHub Release Maven coordinates
+
+### Changed
+- Enable `automaticRelease = true` for Maven Central (no manual approval needed)
+- Verify `com.cikup` namespace on Maven Central
+
+### Added
+- Release automation workflow (`release.yml`): trigger via GitHub Actions with patch/minor/major version bump
+- Auto-generates CHANGELOG entry, bumps version in gradle files, commits, tags, and triggers publish
+
 ## [0.1.0] - 2026-04-03
 
 ### Added
