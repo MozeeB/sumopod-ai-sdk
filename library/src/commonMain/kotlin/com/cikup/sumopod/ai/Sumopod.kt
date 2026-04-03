@@ -13,6 +13,7 @@ import com.cikup.sumopod.ai.model.ModelInfo
 import com.cikup.sumopod.ai.model.ModelList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.fold
+import kotlin.concurrent.Volatile
 
 /**
  * Single entry point for the Sumopod AI SDK.
@@ -36,12 +37,15 @@ import kotlinx.coroutines.flow.fold
  */
 public object Sumopod {
 
+    @Volatile
     private var client: SumopodAIClient? = null
+
+    @Volatile
     private var config: SumopodConfig? = null
 
     /**
      * Initialize the SDK with an API key.
-     * Must be called before any other method.
+     * Must be called before any other method. Thread-safe.
      */
     public fun init(
         apiKey: String,
@@ -51,12 +55,16 @@ public object Sumopod {
         val newConfig = SumopodConfigBuilder(apiKey).apply(block).build()
         InputValidator.validateBaseUrl(newConfig.baseUrl)
 
-        // Close previous client if re-initializing
-        client?.close()
-
+        val oldClient = client
         val httpClient = HttpClientFactory.create(newConfig)
+        val newClient = SumopodAIClient(newConfig, httpClient)
+
+        // Atomic swap
         config = newConfig
-        client = SumopodAIClient(newConfig, httpClient)
+        client = newClient
+
+        // Close old client after swap
+        oldClient?.close()
     }
 
     /**
@@ -116,9 +124,10 @@ public object Sumopod {
      * Release resources. Call when done using the SDK.
      */
     public fun close() {
-        client?.close()
+        val oldClient = client
         client = null
         config = null
+        oldClient?.close()
     }
 
     private fun requireClient(): SumopodAIClient =

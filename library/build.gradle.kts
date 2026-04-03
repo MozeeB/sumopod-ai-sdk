@@ -50,9 +50,6 @@ kotlin {
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
 
-            // DI
-            implementation(libs.koin.core)
-
             // Database
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
@@ -62,7 +59,6 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.ktor.client.mock)
             implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.koin.test)
         }
 
         jvmMain.dependencies {
