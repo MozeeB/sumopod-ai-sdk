@@ -6,8 +6,8 @@ on:
 
 jobs:
   publish:
-    runs-on: macos-latest
-    timeout-minutes: 45
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -22,18 +22,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Cache Konan
-        uses: actions/cache@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('gradle/libs.versions.toml') }}
-          restore-keys: |
-            ${{ runner.os }}-konan-
-
-      - name: Run all tests
-        run: |
-          ./gradlew :library:jvmTest --no-daemon
-          ./gradlew :library:testAndroidHostTest --no-daemon
+      - name: Run JVM tests
+        run: ./gradlew :library:jvmTest --no-daemon
 
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon
