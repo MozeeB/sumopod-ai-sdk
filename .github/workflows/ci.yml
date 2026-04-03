@@ -45,6 +45,12 @@ jobs:
       - name: Run sample unit tests
         run: ./gradlew :sample:testDebugUnitTest --no-daemon
 
+      - name: Run Compose UI tests (desktop)
+        run: ./gradlew :sample:desktopTest --no-daemon
+
+      - name: Run iOS simulator tests
+        run: ./gradlew :library:iosSimulatorArm64Test --no-daemon
+
       - name: Compile iOS targets
         run: ./gradlew :library:compileKotlinIosArm64 :library:compileKotlinIosSimulatorArm64 --no-daemon
 
