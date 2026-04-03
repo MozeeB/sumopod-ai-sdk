@@ -70,7 +70,7 @@ kotlin {
 }
 
 mavenPublishing {
-    publishToMavenCentral()
+    publishToMavenCentral(automaticRelease = true)
     signAllPublications()
     coordinates(group.toString(), "sumopod-ai-sdk", version.toString())
 
