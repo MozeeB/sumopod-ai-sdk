@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Kotlin metadata cache
+.kotlin/
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# Kotlin
+*.class
+*.log
+*.ctxt
+
+# Android
+local.properties
+*.apk
+*.aab
+*.ap_
+
+# Secrets
+*.keystore
+*.jks
+*.env
+
+# Room schemas (generated)
+library/schemas/
+
+# OS
+Thumbs.db
