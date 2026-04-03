@@ -1,0 +1,110 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Calculate next version
+        id: version
+        run: |
+          CURRENT=$(grep -oP 'version\s*=\s*"\K[^"]+' library/build.gradle.kts | head -1)
+          echo "current=$CURRENT"
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+          case "${{ inputs.version_type }}" in
+            major) MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0 ;;
+            minor) MINOR=$((MINOR + 1)); PATCH=0 ;;
+            patch) PATCH=$((PATCH + 1)) ;;
+          esac
+
+          NEXT="${MAJOR}.${MINOR}.${PATCH}"
+          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Bumping $CURRENT → $NEXT (${{ inputs.version_type }})"
+
+      - name: Update version in library/build.gradle.kts
+        run: |
+          sed -i "s/version = \"${{ steps.version.outputs.current }}\"/version = \"${{ steps.version.outputs.next }}\"/" library/build.gradle.kts
+
+      - name: Update version in sample/build.gradle.kts
+        run: |
+          sed -i "s/versionName = \"${{ steps.version.outputs.current }}\"/versionName = \"${{ steps.version.outputs.next }}\"/" sample/build.gradle.kts
+
+      - name: Generate changelog entry
+        id: changelog
+        run: |
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          DATE=$(date +%Y-%m-%d)
+          VERSION="${{ steps.version.outputs.next }}"
+
+          ENTRY="## [$VERSION] - $DATE"$'\n'$'\n'
+          if [ -n "$PREVIOUS_TAG" ]; then
+            COMMITS=$(git log "${PREVIOUS_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          else
+            COMMITS=$(git log --pretty=format:"- %s" --no-merges)
+          fi
+          ENTRY="${ENTRY}${COMMITS}"
+
+          # Write to temp file for multi-line handling
+          echo "$ENTRY" > /tmp/changelog_entry.txt
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Update CHANGELOG.md
+        run: |
+          if [ -f CHANGELOG.md ]; then
+            # Insert new entry after the header line
+            HEADER_END=$(grep -n "^## \[" CHANGELOG.md | head -1 | cut -d: -f1)
+            if [ -n "$HEADER_END" ]; then
+              head -n $((HEADER_END - 1)) CHANGELOG.md > /tmp/changelog_new.md
+              echo "" >> /tmp/changelog_new.md
+              cat /tmp/changelog_entry.txt >> /tmp/changelog_new.md
+              echo "" >> /tmp/changelog_new.md
+              tail -n +$HEADER_END CHANGELOG.md >> /tmp/changelog_new.md
+              mv /tmp/changelog_new.md CHANGELOG.md
+            else
+              echo "" >> CHANGELOG.md
+              cat /tmp/changelog_entry.txt >> CHANGELOG.md
+            fi
+          else
+            echo "# Changelog" > CHANGELOG.md
+            echo "" >> CHANGELOG.md
+            cat /tmp/changelog_entry.txt >> CHANGELOG.md
+          fi
+
+      - name: Commit version bump
+        run: |
+          git add library/build.gradle.kts sample/build.gradle.kts CHANGELOG.md
+          git commit -m "chore: bump version to ${{ steps.version.outputs.next }}"
+
+      - name: Create and push tag
+        run: |
+          git tag "v${{ steps.version.outputs.next }}"
+          git push origin main --follow-tags
