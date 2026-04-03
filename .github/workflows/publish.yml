@@ -31,6 +31,17 @@ jobs:
       - name: Run JVM tests
         run: ./gradlew :library:jvmTest --no-daemon
 
+      - name: Import and upload GPG key to keyservers
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+        run: |
+          echo "$SIGNING_KEY" | gpg --batch --import
+          KEY_ID=$(gpg --list-keys --keyid-format long | grep '^pub' | head -1 | awk '{print $2}' | cut -d'/' -f2)
+          echo "Uploading GPG key $KEY_ID to keyservers..."
+          gpg --keyserver keyserver.ubuntu.com --send-keys "$KEY_ID" || true
+          gpg --keyserver keys.openpgp.org --send-keys "$KEY_ID" || true
+          gpg --keyserver pgp.mit.edu --send-keys "$KEY_ID" || true
+
       - name: Publish to Maven Central
         run: ./gradlew publishAllPublicationsToMavenCentralRepository --no-daemon
         env:
@@ -40,16 +51,21 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
 
+      - name: Extract version from tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: version
+        run: echo "number=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
           body: |
-            ## Sumopod AI SDK ${{ github.ref_name }}
+            ## Sumopod AI SDK ${{ steps.version.outputs.number }}
 
             Published to Maven Central.
 
             ```kotlin
-            implementation("com.cikup.sumopod.ai:sumopod-ai-sdk:${{ github.ref_name }}")
+            implementation("com.cikup.sumopod.ai:sumopod-ai-sdk:${{ steps.version.outputs.number }}")
             ```
