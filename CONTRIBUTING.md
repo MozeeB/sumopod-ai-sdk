@@ -12,12 +12,14 @@
 ## Building
 
 ```bash
-./gradlew build                          # Full build
-./gradlew :library:jvmTest               # Library JVM tests
-./gradlew :library:testAndroidHostTest   # Library Android tests
-./gradlew :sample:testDebugUnitTest      # Sample unit tests
-./gradlew :sample:assembleDebug          # Android APK
-./gradlew :sample:run                    # Desktop sample
+./gradlew build                             # Full build
+./gradlew :library:jvmTest                  # Library JVM tests (37)
+./gradlew :library:testAndroidHostTest      # Library Android tests (62)
+./gradlew :library:iosSimulatorArm64Test    # Library iOS tests (37)
+./gradlew :sample:testDebugUnitTest         # Sample unit tests (22)
+./gradlew :sample:desktopTest               # Compose UI tests (15)
+./gradlew :sample:assembleDebug             # Android APK
+./gradlew :sample:run                       # Desktop sample
 ```
 
 ## Code Style
@@ -40,7 +42,10 @@ When updating dependencies, ensure ABI compatibility with Kotlin 2.2.20:
 1. Fork the repository
 2. Create a feature branch from `main`
 3. Write tests for new functionality
-4. Ensure all tests pass
+4. Ensure all 173 tests pass:
+   ```bash
+   ./gradlew :library:jvmTest :library:testAndroidHostTest :library:iosSimulatorArm64Test :sample:testDebugUnitTest :sample:desktopTest
+   ```
 5. Submit a pull request
 
 ## License

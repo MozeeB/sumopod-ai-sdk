@@ -9,8 +9,10 @@ Kotlin Multiplatform SDK for the [Sumopod AI API](https://sumopod.com/dashboard/
 - Model listing
 - Kotlin Multiplatform: Android, iOS, JVM
 - SSE streaming via Kotlin Flow
-- Single entry point: `Sumopod` object
+- Thread-safe `Sumopod` singleton entry point
+- Room KMP caching (opt-in, internal)
 - Security: API key redaction, HTTPS-only, input validation
+- 173 automated tests across all platforms
 
 ## Quick Start
 
@@ -108,6 +110,9 @@ Compose Multiplatform sample with Chat, Models, and Settings screens.
 
 # Android
 ./gradlew :sample:assembleDebug
+
+# iOS (open in Xcode)
+open sample/iosApp/iosApp.xcodeproj
 ```
 
 ## Platform Support
@@ -125,6 +130,19 @@ Compose Multiplatform sample with Chat, Models, and Settings screens.
 - All inputs validated before API calls
 - Error messages never contain sensitive data
 - `SumopodConfig.toString()` redacts API key
+- Thread-safe singleton with `@Volatile` fields
+
+## Testing
+
+173 automated tests across 5 platforms:
+
+```bash
+./gradlew :library:jvmTest              # 37 tests
+./gradlew :library:testAndroidHostTest  # 62 tests
+./gradlew :library:iosSimulatorArm64Test # 37 tests
+./gradlew :sample:testDebugUnitTest     # 22 tests
+./gradlew :sample:desktopTest           # 15 Compose UI tests
+```
 
 ## Dependencies
 

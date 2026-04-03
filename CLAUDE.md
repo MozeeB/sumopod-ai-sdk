@@ -10,8 +10,11 @@ Kotlin Multiplatform SDK for the Sumopod AI API (OpenAI-compatible). Single entr
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 
 ./gradlew :library:build              # Build library (all targets)
-./gradlew :library:jvmTest            # Run JVM tests
-./gradlew :library:testAndroidHostTest # Run Android tests
+./gradlew :library:jvmTest            # Run JVM tests (37 tests)
+./gradlew :library:testAndroidHostTest # Run Android tests (62 tests)
+./gradlew :library:iosSimulatorArm64Test # Run iOS simulator tests (37 tests)
+./gradlew :sample:testDebugUnitTest   # Run sample Android tests (22 tests)
+./gradlew :sample:desktopTest         # Run Compose UI tests (15 tests)
 ./gradlew :sample:assembleDebug       # Build Android sample APK
 ./gradlew :sample:run                 # Run desktop sample
 ./gradlew :library:compileKotlinIosArm64  # Compile iOS
@@ -58,4 +61,9 @@ library/src/
 
 ## Testing
 
-Run with `./gradlew :library:jvmTest :library:testAndroidHostTest :sample:testDebugUnitTest`.
+Run all 173 tests:
+```bash
+./gradlew :library:jvmTest :library:testAndroidHostTest :library:iosSimulatorArm64Test :sample:testDebugUnitTest :sample:desktopTest
+```
+
+Test files: SerializationTest, ChatCompletionTest, StreamingTest, ErrorHandlingTest, SecurityTest, InputValidatorTest (library); ChatViewModelTest, ClientProviderTest, SettingsViewModelTest (sample unit); ChatScreenUiTest, SettingsScreenUiTest, AppNavigationUiTest (sample Compose UI).
