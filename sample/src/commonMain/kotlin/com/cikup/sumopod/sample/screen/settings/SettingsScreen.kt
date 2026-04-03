@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 fun SettingsScreen(viewModel: SettingsViewModel) {
     val apiKey by viewModel.apiKey.collectAsState()
     val baseUrl by viewModel.baseUrl.collectAsState()
-    val cacheEnabled by viewModel.cacheEnabled.collectAsState()
 
     Column(
         modifier = Modifier
@@ -67,22 +65,6 @@ fun SettingsScreen(viewModel: SettingsViewModel) {
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                androidx.compose.foundation.layout.Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = "Enable Cache",
-                        modifier = Modifier.weight(1f),
-                    )
-                    Switch(
-                        checked = cacheEnabled,
-                        onCheckedChange = { viewModel.toggleCache() },
-                    )
-                }
             }
         }
 

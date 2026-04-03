@@ -26,13 +26,5 @@
 -keep class io.ktor.** { *; }
 -dontwarn io.ktor.**
 
-# Room
--keep class com.cikup.sumopod.ai.cache.** { *; }
--keep class * extends androidx.room.RoomDatabase { *; }
-
-# Koin
--keep class org.koin.** { *; }
--dontwarn org.koin.**
-
 # Coroutines
 -dontwarn kotlinx.coroutines.**

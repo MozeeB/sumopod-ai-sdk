@@ -6,8 +6,6 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.vanniktech.mavenPublish)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.room)
 }
 
 group = "com.cikup.sumopod.ai"
@@ -49,10 +47,6 @@ kotlin {
 
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
-
-            // Database
-            implementation(libs.room.runtime)
-            implementation(libs.sqlite.bundled)
         }
 
         commonTest.dependencies {
@@ -72,22 +66,6 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-    }
-}
-
-room {
-    schemaDirectory("$projectDir/schemas")
-}
-
-dependencies {
-    listOf(
-        "kspJvm",
-        "kspAndroid",
-        "kspIosX64",
-        "kspIosArm64",
-        "kspIosSimulatorArm64",
-    ).forEach { targetName ->
-        add(targetName, libs.room.compiler)
     }
 }
 

@@ -7,13 +7,12 @@ public data class SumopodConfig(
     val requestTimeoutMs: Long = 60_000L,
     val socketTimeoutMs: Long = 30_000L,
     val logLevel: LogLevel = LogLevel.INFO,
-    val enableCache: Boolean = false,
     val certificatePins: List<String> = emptyList(),
 ) {
     public enum class LogLevel { NONE, INFO, HEADERS, BODY }
 
     override fun toString(): String =
-        "SumopodConfig(apiKey=sk-***, baseUrl=$baseUrl, logLevel=$logLevel, enableCache=$enableCache)"
+        "SumopodConfig(apiKey=sk-***, baseUrl=$baseUrl, logLevel=$logLevel)"
 
     public companion object {
         public const val DEFAULT_BASE_URL: String = "https://ai.sumopod.com/v1"
@@ -26,7 +25,6 @@ public class SumopodConfigBuilder(private val apiKey: String) {
     public var requestTimeoutMs: Long = 60_000L
     public var socketTimeoutMs: Long = 30_000L
     public var logLevel: SumopodConfig.LogLevel = SumopodConfig.LogLevel.INFO
-    public var enableCache: Boolean = false
     public var certificatePins: List<String> = emptyList()
 
     public fun timeout(block: TimeoutBuilder.() -> Unit) {
@@ -43,7 +41,6 @@ public class SumopodConfigBuilder(private val apiKey: String) {
         requestTimeoutMs = requestTimeoutMs,
         socketTimeoutMs = socketTimeoutMs,
         logLevel = logLevel,
-        enableCache = enableCache,
         certificatePins = certificatePins,
     )
 }

@@ -41,14 +41,6 @@ class SettingsScreenUiTest {
     }
 
     @Test
-    fun settingsScreenShowsCacheToggle() = runComposeUiTest {
-        setContent {
-            SettingsScreen(SettingsViewModel())
-        }
-        onNodeWithText("Enable Cache").assertIsDisplayed()
-    }
-
-    @Test
     fun settingsScreenShowsDefaultBaseUrl() = runComposeUiTest {
         setContent {
             SettingsScreen(SettingsViewModel())

@@ -22,12 +22,6 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun initialCacheDisabled() {
-        val vm = SettingsViewModel()
-        assertFalse(vm.cacheEnabled.value)
-    }
-
-    @Test
     fun updateApiKeyChangesState() {
         val vm = SettingsViewModel()
         vm.updateApiKey("sk-newKeyForTesting12345678")
@@ -39,16 +33,6 @@ class SettingsViewModelTest {
         val vm = SettingsViewModel()
         vm.updateBaseUrl("https://custom.api.com/v1")
         assertEquals("https://custom.api.com/v1", vm.baseUrl.value)
-    }
-
-    @Test
-    fun toggleCacheFlipsState() {
-        val vm = SettingsViewModel()
-        assertFalse(vm.cacheEnabled.value)
-        vm.toggleCache()
-        assertTrue(vm.cacheEnabled.value)
-        vm.toggleCache()
-        assertFalse(vm.cacheEnabled.value)
     }
 
     @Test
