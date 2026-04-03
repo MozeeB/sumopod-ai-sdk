@@ -18,9 +18,16 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "SumopodSample"
+            isStatic = true
+        }
+    }
 
     sourceSets {
         val desktopMain by getting
@@ -38,14 +45,6 @@ kotlin {
             // Navigation
             implementation(libs.androidx.navigation.compose)
 
-            // ViewModel
-            implementation(libs.androidx.lifecycle.viewmodel)
-
-            // DI
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-
             // Coroutines
             implementation(libs.kotlinx.coroutines.core)
         }
@@ -53,7 +52,6 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.android)
         }
 
         commonTest.dependencies {

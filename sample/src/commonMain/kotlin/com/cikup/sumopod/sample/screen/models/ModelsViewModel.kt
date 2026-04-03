@@ -1,10 +1,11 @@
 package com.cikup.sumopod.sample.screen.models
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.ai.model.ModelInfo
 import com.cikup.sumopod.sample.di.ClientProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +20,8 @@ data class ModelsUiState(
 
 class ModelsViewModel(
     private val clientProvider: ClientProvider,
-) : ViewModel() {
+) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val _uiState = MutableStateFlow(ModelsUiState())
     val uiState: StateFlow<ModelsUiState> = _uiState.asStateFlow()
@@ -32,7 +34,7 @@ class ModelsViewModel(
 
         _uiState.update { it.copy(isLoading = true, error = null) }
 
-        viewModelScope.launch {
+        scope.launch {
             try {
                 val modelList = Sumopod.models()
                 _uiState.update {

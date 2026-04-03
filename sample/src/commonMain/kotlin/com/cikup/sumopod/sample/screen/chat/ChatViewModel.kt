@@ -1,12 +1,13 @@
 package com.cikup.sumopod.sample.screen.chat
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.cikup.sumopod.ai.Sumopod
 import com.cikup.sumopod.ai.model.ChatCompletionRequest
 import com.cikup.sumopod.ai.model.ChatMessage
 import com.cikup.sumopod.ai.model.ChatRole
 import com.cikup.sumopod.sample.di.ClientProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +29,8 @@ data class ChatUiState(
 
 class ChatViewModel(
     private val clientProvider: ClientProvider,
-) : ViewModel() {
+) {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val _uiState = MutableStateFlow(ChatUiState())
     val uiState: StateFlow<ChatUiState> = _uiState.asStateFlow()
@@ -53,7 +55,7 @@ class ChatViewModel(
             )
         }
 
-        viewModelScope.launch {
+        scope.launch {
             try {
                 val chatMessages = _uiState.value.messages.map { msg ->
                     ChatMessage(role = msg.role, content = msg.content)

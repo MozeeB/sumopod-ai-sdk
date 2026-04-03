@@ -6,7 +6,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -14,14 +14,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.cikup.sumopod.sample.di.ClientProvider
 import com.cikup.sumopod.sample.screen.chat.ChatScreen
 import com.cikup.sumopod.sample.screen.chat.ChatViewModel
 import com.cikup.sumopod.sample.screen.models.ModelsScreen
 import com.cikup.sumopod.sample.screen.models.ModelsViewModel
 import com.cikup.sumopod.sample.screen.settings.SettingsScreen
 import com.cikup.sumopod.sample.screen.settings.SettingsViewModel
-import org.koin.compose.koinInject
-import org.koin.compose.viewmodel.koinViewModel
 
 enum class Screen(val route: String, val label: String) {
     Chat("chat", "Chat"),
@@ -30,10 +29,16 @@ enum class Screen(val route: String, val label: String) {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    settingsViewModel: SettingsViewModel,
+    clientProvider: ClientProvider,
+) {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry.value?.destination
+
+    val chatViewModel = remember { ChatViewModel(clientProvider) }
+    val modelsViewModel = remember { ModelsViewModel(clientProvider) }
 
     Scaffold(
         bottomBar = {
@@ -65,16 +70,13 @@ fun AppNavigation() {
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(Screen.Chat.route) {
-                val viewModel = koinViewModel<ChatViewModel>()
-                ChatScreen(viewModel)
+                ChatScreen(chatViewModel)
             }
             composable(Screen.Models.route) {
-                val viewModel = koinViewModel<ModelsViewModel>()
-                ModelsScreen(viewModel)
+                ModelsScreen(modelsViewModel)
             }
             composable(Screen.Settings.route) {
-                val viewModel: SettingsViewModel = koinInject()
-                SettingsScreen(viewModel)
+                SettingsScreen(settingsViewModel)
             }
         }
     }
