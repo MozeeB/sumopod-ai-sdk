@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.testTag
 import com.cikup.sumopod.sample.component.MessageBubble
 
 private val availableModels = listOf(
@@ -140,7 +141,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag("messageInput"),
                 placeholder = { Text("Type a message...") },
                 enabled = !uiState.isLoading,
                 maxLines = 3,
@@ -151,6 +152,7 @@ fun ChatScreen(viewModel: ChatViewModel) {
                     viewModel.sendMessage(inputText)
                     inputText = ""
                 },
+                modifier = Modifier.testTag("sendButton"),
                 enabled = inputText.isNotBlank() && !uiState.isLoading,
             ) {
                 Text("Send")
